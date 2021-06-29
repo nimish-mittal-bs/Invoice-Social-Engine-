@@ -81,16 +81,19 @@ document.getElementById('sub_total').value= val8;
 
 }
 
-function GrandTotal(){
-  val5=0;
-  val8=parseInt(val5);
-for (let i=1; i<=room;i++){
-  f="total"+i;
-  let val6=document.getElementsByName(f)[0].value;
-  val9=document.getElementById('discount').value
-  val7=parseInt(val6);
-  val8=val8+val7;
-}
-document.getElementById('total').value= val8;
 
-}
+// function GrandTotal(){
+//   val5=0;
+//   val8=parseInt(val5);
+// for (let i=1; i<=room;i++){
+//   f="total"+i;
+//   let val6=document.getElementsByName(f)[0].value;
+//   val9=document.getElementById('discount').value
+//   val9=parseInt(val9);
+//   val6=parseInt(val6);
+//   val10=(100-val9)/100;
+//   val11=val6*val10;
+//   }
+// document.getElementById('total').value= "<?php echo $CGST; ?>";
+
+// }

@@ -1,11 +1,30 @@
 <?php
-class Invoice_Form_Admin_Settings_Level extends Authorization_Form_Admin_Level_Abstract{
+class Invoice_Form_Admin_Settings_Level extends Authorization_Form_Admin_Level_Abstract
+{
 	public function init(){
+
         parent::init();
 		// My stuff
         $this
             ->setTitle('Member Level Settings')
             ->setDescription("Invoice_FORM_ADMIN_LEVEL_DESCRIPTION");
+
+        // Element: view
+        $this->addElement('Radio', 'view', array(
+            'label' => 'Allow Viewing of Invoices?',
+            'description' => 'Do you want to let members view Invoices? If set to no, some other settings on this page may not apply.',
+            'multiOptions' => array(
+                2 => 'Yes, allow viewing of all invoices, even private ones.',
+                1 => 'Yes, allow viewing of invoices.',
+                0 => 'No, do not allow invoices to be viewed.',
+            ),
+            'value' => ( $this->isModerator() ? 2 : 1 ),
+        ));
+        if( !$this->isModerator() ) {
+            unset($this->view->options[2]);
+        }
+
+        if( !$this->isPublic() ) {
 
 			// Element: max
             $this->addElement('Text', 'max', array(
@@ -23,17 +42,7 @@ class Invoice_Form_Admin_Settings_Level extends Authorization_Form_Admin_Level_A
                 'allowEmpty' => false,
                 'value' => array(0, 'minute'),
             ));
-            // Element: view
-	        $this->addElement('Radio', 'view', array(
-	            'label' => 'Allow Viewing of Invoices?',
-	            'description' => 'Do you want to let members view invoices? If set to no, some other settings on this page may not apply.',
-	            'multiOptions' => array(
-	                2 => 'Yes, allow viewing of all invoices, even private ones.',
-	                1 => 'Yes, allow viewing of invoices.',
-	                0 => 'No, do not allow invoices to be viewed.',
-	            ),
-	            'value' => ( $this->isModerator() ? 2 : 1 ),
-	        ));
+            
             // Element: create
             $this->addElement('Radio', 'create', array(
                 'label' => 'Allow Creation of Invoices?',
@@ -81,7 +90,8 @@ class Invoice_Form_Admin_Settings_Level extends Authorization_Form_Admin_Level_A
 	                0 => 'No, do not.',
 	            ),
 	            'value' => ( $this->isModerator() ? 2 : 1 ),
-	        ));      
+	        ));   
+        }   
 	}
 }
 ?>

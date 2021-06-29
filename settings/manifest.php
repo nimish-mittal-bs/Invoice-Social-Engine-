@@ -47,7 +47,7 @@
       ),
       'reqs' => array(
         'invoice_id' => '\d+',
-        'action' => '(delete|edit)',
+        'action' => '(delete|edit|view)',
       ),
     ),
     'invoice_general' => array(

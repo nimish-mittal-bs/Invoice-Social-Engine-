@@ -39,6 +39,7 @@ function selectAll()
      // die;?>
      <tr>
      <td><input type='checkbox' class='checkbox' name='delete_<?php echo $item['invoice_id']; ?>' value="<?php echo $item['invoice_id']; ?>" /></td>
+     
         <td><?php echo $item['invoice_id'] ?></td>
         <td><?php echo $item['date'] ?></td>
         <td><?php echo $item['invoice_number'] ?></td>

@@ -38,6 +38,23 @@ class Invoice_Form_Admin_Global extends Engine_Form
       'label' => 'IGST%',
    	  'value' => Engine_Api::_()->getApi('settings', 'core')->getSetting('invoice.igst', 18),
     ));
+
+    $this->addElement('Text', 'invoice_pan', array(
+      'label' => 'PAN NUmber',
+      'value' => Engine_Api::_()->getApi('settings', 'core')->getSetting('invoice.pan', 18),
+    ));
+
+    $this->addElement('Text', 'invoice_gst', array(
+      'label' => 'GST Number',
+      'value' => Engine_Api::_()->getApi('settings', 'core')->getSetting('invoice.gst', 18),
+    ));
+
+    $this->addElement('Text', 'invoice_lut', array(
+      'label' => 'LUT',
+      'value' => Engine_Api::_()->getApi('settings', 'core')->getSetting('invoice.lut', 18),
+    ));
+
+   
      
     // Add submit button
     $this->addElement('Button', 'submit', array(

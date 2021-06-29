@@ -127,7 +127,6 @@
         ));
 
         // paid option
-
         $this->addElement('Select', 'status', array(
             'label' => 'Status',
             'multiOptions' => array("0"=>"unpaid", "1"=>"paid", 2=>"cancelled"),
