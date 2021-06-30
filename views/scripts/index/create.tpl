@@ -6,10 +6,6 @@ $this->headScript()
       ->appendFile($this->layout()->staticBaseUrl . '/application/modules/Invoice/externals/scripts/Validation.js');
 ?>
 
-
-
-
-
 <script>
 	scriptJquery(document).ready(function() {
     //totalfiels++;
@@ -46,19 +42,44 @@ $this->headScript()
   }
 
   function GrandTotal(){
+    console.log("hey");
     val5=0;
     val8=parseInt(val5);
-    for (let i=1; i<=room;i++){
-      f="total"+i;
-      let val6=document.getElementsByName(f)[0].value;
-      val9=document.getElementById('discount').value
-      val9=parseInt(val9);
-      val6=parseInt(val6);
-      val10=(100-val9)/100;
-      val11=val6*val10;
-      }
-    document.getElementById('total').value= "<?php echo $CGST; ?>";
+    // for (let i=1; i<=10;i++){
+    //   f="total"+i;
 
+      //let val6=document.getElementsByName(f)[0].value;
+      val12=document.getElementById('sub_total').value
+      val9=document.getElementById('discount').value
+      val13=document.getElementById('currency').value
+      val9=parseInt(val9);
+      val12=parseInt(val12);
+      val10=(100-val9)/100;
+      val11=val12*val10;
+      if (val13==0)
+      {
+        document.getElementById('total').value=val11;
+
+        //console.log("USD");
+      }
+      else
+      {
+        // val16="<?php echo $CGST ?>";
+        // console.log(val16);
+        val14=document.getElementById('inr').value
+        if (val14==0)
+        {
+          document.getElementById('total').value=val11;
+        }
+        else
+        {
+          document.getElementById('total').value=val11;
+        }
+      }
+      //console.log(val13);
+      
+    //    //}
+     
   }
  </script>
 

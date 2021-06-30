@@ -23,7 +23,7 @@ class Invoice_AdminLevelController extends Core_Controller_Action_Admin{
       'public' => ( in_array($level->type, array('public')) ),
       'moderator' => ( in_array($level->type, array('admin', 'moderator')) ),
     ));
-    //$form->level_id->setValue($id);
+    $form->level_id->setValue($id);
 
     // Populate values
     $permissionsTable = Engine_Api::_()->getDbtable('permissions', 'authorization');

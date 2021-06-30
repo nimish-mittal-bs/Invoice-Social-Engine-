@@ -41,17 +41,17 @@ class Invoice_Form_Admin_Global extends Engine_Form
 
     $this->addElement('Text', 'invoice_pan', array(
       'label' => 'PAN NUmber',
-      'value' => Engine_Api::_()->getApi('settings', 'core')->getSetting('invoice.pan', 18),
+      'value' => Engine_Api::_()->getApi('settings', 'core')->getSetting('invoice.pan', "AAAPZ1234C"),
     ));
 
     $this->addElement('Text', 'invoice_gst', array(
       'label' => 'GST Number',
-      'value' => Engine_Api::_()->getApi('settings', 'core')->getSetting('invoice.gst', 18),
+      'value' => Engine_Api::_()->getApi('settings', 'core')->getSetting('invoice.gst', "22AAAAA0000A1Z5"),
     ));
 
     $this->addElement('Text', 'invoice_lut', array(
       'label' => 'LUT',
-      'value' => Engine_Api::_()->getApi('settings', 'core')->getSetting('invoice.lut', 18),
+      'value' => Engine_Api::_()->getApi('settings', 'core')->getSetting('invoice.lut', "154/CGST/Divison-North"),
     ));
 
    

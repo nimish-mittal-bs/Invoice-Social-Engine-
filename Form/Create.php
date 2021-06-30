@@ -69,6 +69,7 @@
          // Select Currency
         $this->addElement('Select', 'currency', array(
           'label' => 'Select Currency',
+          'id'=>'currency',
           'multiOptions' => array(
             '0' => 'USD',
             '1' => 'INR',
@@ -80,6 +81,7 @@
         $this->addElement('Select', 'INR', array(
           'label' => 'INR',
           //'description' => "What type of event you want?",
+          'id' => 'inr',
           'multiOptions' => array(
             '0' => 'Haryana',
             '1' => 'out of Haryana',

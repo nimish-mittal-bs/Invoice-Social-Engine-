@@ -27,21 +27,21 @@ class Invoice_Form_Admin_Settings_Level extends Authorization_Form_Admin_Level_A
         if( !$this->isPublic() ) {
 
 			// Element: max
-            $this->addElement('Text', 'max', array(
-                'label' => 'Maximum Allowed Invoice Entries?',
-                'description' => 'Enter the maximum number of allowed invoice entries. The field must contain an integer between 1 and 999, or 0 for unlimited.',
-                'validators' => array(
-                    array('Int', true),
-                    new Engine_Validate_AtLeast(0),
-                ),
-            ));
-            $this->addElement('FloodControl', 'flood', array(
-                'label' => 'Maximum Allowed Invoice Entries per Duration',
-                'description' => 'Enter the maximum number of invoice entries allowed for the selected duration (per minute / per hour / per day) for members of this level. The field must contain an integer between 1 and 9999, or 0 for unlimited.',
-                'required' => true,
-                'allowEmpty' => false,
-                'value' => array(0, 'minute'),
-            ));
+            // $this->addElement('Text', 'max', array(
+            //     'label' => 'Maximum Allowed Invoice Entries?',
+            //     'description' => 'Enter the maximum number of allowed invoice entries. The field must contain an integer between 1 and 999, or 0 for unlimited.',
+            //     'validators' => array(
+            //         array('Int', true),
+            //         new Engine_Validate_AtLeast(0),
+            //     ),
+            // ));
+            // $this->addElement('FloodControl', 'flood', array(
+            //     'label' => 'Maximum Allowed Invoice Entries per Duration',
+            //     'description' => 'Enter the maximum number of invoice entries allowed for the selected duration (per minute / per hour / per day) for members of this level. The field must contain an integer between 1 and 9999, or 0 for unlimited.',
+            //     'required' => true,
+            //     'allowEmpty' => false,
+            //     'value' => array(0, 'minute'),
+            // ));
             
             // Element: create
             $this->addElement('Radio', 'create', array(
@@ -82,15 +82,15 @@ class Invoice_Form_Admin_Settings_Level extends Authorization_Form_Admin_Level_A
                 unset($this->delete->options[2]);
             }
             // Element: view
-	        $this->addElement('Radio', 'recipient', array(
-	            'label' => 'Allow Choosing Recipint?',
-	            'multiOptions' => array(
-	                2 => 'Yes, allow.',
-	                1 => 'Yes, allow.',
-	                0 => 'No, do not.',
-	            ),
-	            'value' => ( $this->isModerator() ? 2 : 1 ),
-	        ));   
+	        // $this->addElement('Radio', 'recipient', array(
+	        //     'label' => 'Allow Choosing Recipint?',
+	        //     'multiOptions' => array(
+	        //         2 => 'Yes, allow.',
+	        //         1 => 'Yes, allow.',
+	        //         0 => 'No, do not.',
+	        //     ),
+	        //     'value' => ( $this->isModerator() ? 2 : 1 ),
+	        // ));   
         }   
 	}
 }

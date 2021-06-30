@@ -8,11 +8,8 @@
     'path' => 'application/modules/Invoice',
     'title' => 'Invoice',
     'description' => 'Invoice',
-    'author' => 'Socialengine',
-    'callback' => 
-    array (
-      'class' => 'Engine_Package_Installer_Module',
-    ),
+    'author' => 'Nimish',
+    
     'actions' => 
     array (
       0 => 'install',
@@ -20,6 +17,10 @@
       2 => 'refresh',
       3 => 'enable',
       4 => 'disable',
+    ),
+     'callback' => array(
+      'path' => 'application/modules/Invoice/settings/install.php',
+      'class' => 'Invoice_Installer',
     ),
     'directories' => 
     array (
@@ -33,8 +34,17 @@
   // Items ---------------------------------------------------------------------
   'items' => array(
     'invoice','invoice_product',
-    'invoice_category','invoice_currency',
+    'invoice_category','invoice_value',
   ),
+
+  // Hooks ---------------------------------------------------------------------
+  'hooks' => array(
+    array(
+      'event' => 'onUserDeleteBefore',
+      'resource' => 'Invoice_Plugin_Core',
+    ),
+  ),
+
   // Routes --------------------------------------------------------------------
   'routes' => array(
     // Public

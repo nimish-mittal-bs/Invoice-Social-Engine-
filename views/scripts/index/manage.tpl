@@ -1,30 +1,77 @@
-<script type="text/javascript">
 
-function multiDelete()
-{
-  return confirm("<?php echo $this->translate('Are you sure you want to delete the selected invoice entries?');?>");
-}
 
-function selectAll()
-{
-  var i;
-  var multidelete_form = $('multidelete_form');
-  var inputs = multidelete_form.elements;
-  for (i = 1; i < inputs.length; i++) {
-    if (!inputs[i].disabled) {
-      inputs[i].checked = inputs[0].checked;
+
+<style type="text/css">
+  /*
+  .product-item > input {
+    width: 100px;
+    }*/
+
+    .product-item > input,
+    .product-item > h4 {
+      height: 40px;
+      margin: 0px 4px;
     }
-  }
+
+    .product{
+      width: 240px;
+    }
+
+    .quantity{
+      width: 80px;
+    }
+
+    .amount{
+      width: 100px;
+    }
+
+    .product-item{
+      margin: 8px 0px;
+    }
+
+  </style>
+<style type="text/css">
+  #global_wrapper{
+    background-color: #fcfcfc !important;
+    border-top: 1px solid gray;
 }
-</script>
+
+table{
+    /border: 1px solid black;/
+    width: 100%;
+
+    border-radius: 25px;
+}
+
+.table-heading{
+    background-color: #f5f5f5;
+}
+th{
+    font-size: 18px;
+    font
+}
+th,td{
+    padding: 10px;
+    color: black;
+}
+tr:nth-child(even) {
+    background-color: white;
+}
+.item-row{
+    border-bottom: 1px solid #fae1e1;
+}
+
+
+</style>
+
 
 
 <?php if( count($this->paginator) ): ?>
-<form id='multidelete_form' method="post" action="<?php echo $this->url();?>" onSubmit="return multiDelete()">
+<form id='multidelete_form' method="post" action="<?php echo $this->url();?>">
 <table class='admin_table'>
   <thead>
     <tr>
-      <th class='admin_table_short'><input onclick='selectAll();' type='checkbox' class='checkbox' /></th>
+      </th>
       <th class='admin_table_short'>ID</th>
       <th><?php echo $this->translate("Date") ?></th>
       <th><?php echo $this->translate("Invoice Number") ?></th>
@@ -38,7 +85,6 @@ function selectAll()
      // print_r($item->toArray());
      // die;?>
      <tr>
-     <td><input type='checkbox' class='checkbox' name='delete_<?php echo $item['invoice_id']; ?>' value="<?php echo $item['invoice_id']; ?>" /></td>
      
         <td><?php echo $item['invoice_id'] ?></td>
         <td><?php echo $item['date'] ?></td>
@@ -66,9 +112,6 @@ function selectAll()
 
 <br />
 
-<div class='buttons'>
-  <button type='submit'><?php echo $this->translate("Delete Selected") ?></button>
-</div>
 </form>
 
 <br/>
@@ -79,7 +122,7 @@ function selectAll()
 <?php else: ?>
   <div class="tip">
     <span>
-      <?php echo $this->translate("There are no blog entries by your members yet.") ?>
+      <?php echo $this->translate("There are no invoice entries by your members yet.") ?>
     </span>
   </div>
 <?php endif; ?>

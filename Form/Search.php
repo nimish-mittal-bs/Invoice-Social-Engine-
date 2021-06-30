@@ -10,14 +10,16 @@ class Invoice_Form_Search extends Engine_Form
       ->setAction(Zend_Controller_Front::getInstance()->getRouter()->assemble(array()))
       ->setMethod('GET')
       ;
-      $this->addElement('Text', 'search', array(
-      'label' => 'Search Invoices',
-    ));
-     $this->addElement('Select', 'orderby', array(
+    //   $this->addElement('Text', 'search', array(
+    //   'label' => 'Search Invoices',
+    // ));
+
+     $this->addElement('Select', 'status', array(
       'label' => 'Browse By',
       'multiOptions' => array(
-        'status' => 'unpiad',
-        'status' => 'paid',
+        '0' => 'unpaid',
+        '1' => 'paid',
+        '2'=> 'cancelled'
       ),
       'onchange' => 'this.form.submit();',
     ));

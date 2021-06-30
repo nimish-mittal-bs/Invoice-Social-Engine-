@@ -4,12 +4,27 @@ class Invoice_IndexController extends Core_Controller_Action_Standard
 {
   public function indexAction()
   {
-    
-    
-    
-      $this->view->someVar = 'someVal';
+    //$this->view->someVar = 'someVal';
+    // Prepare data
+        $viewer = Engine_Api::_()->user()->getViewer();
+        // Permissions
+        $this->view->canCreate = $this->_helper->requireAuth()->setAuthParams('invoice', null, 'create')->checkRequire();
+
+        // Make form
+        // Note: this code is duplicated in the invoice.browse-search widget
+        $this->view->form = $form = new Invoice_Form_Search();
+
+         // Process form
+        $defaultValues = $form->getValues();
+        if( $form->isValid($this->_getAllParams()) ) {
+            $values = $form->getValues();
+        } else {
+            $values = $defaultValues;
+        }
+        $this->view->formValues = array_filter($values);
+
         // Get invoices
-        $paginator = Engine_Api::_()->getItemTable('invoice')->getInvoicesPaginator(1)  ;
+        $paginator = Engine_Api::_()->getItemTable('invoice')->getInvoicesPaginator($values)  ;
 
         $items_per_page = Engine_Api::_()->getApi('settings', 'core')->invoice_page;
         $paginator->setItemCountPerPage($items_per_page);
@@ -27,9 +42,19 @@ class Invoice_IndexController extends Core_Controller_Action_Standard
   public function manageAction()
   {
     if( !$this->_helper->requireUser()->isValid() ) return;
+    // Render
+        $this->_helper->content
+            //->setNoRender()
+            ->setEnabled()
+        ;
+
         // Prepare data
     $viewer = Engine_Api::_()->user()->getViewer();
     $this->view->form = $form = new Invoice_Form_Search();
+    //print_r($this->getAllParams());
+    // $this->view->canCreate = $this->_helper->requireAuth()->setAuthParams('invoice', null, 'create')->checkRequire();
+
+    //process form
     $defaultValues = $form->getValues();
         if( $form->isValid($this->_getAllParams()) ) {
             $values = $form->getValues();
@@ -37,8 +62,10 @@ class Invoice_IndexController extends Core_Controller_Action_Standard
             $values = $defaultValues;
         }
         $this->view->formValues = array_filter($values);
-        // $values['user_id'] = $viewer->getIdentity();
+        $values['user_id'] = $viewer->getIdentity();
 
+        print_r($values);
+        // die;
         // Get paginator
         $this->view->paginator = $paginator = Engine_Api::_()->getItemTable('invoice')->getInvoicesPaginator($values);
 
@@ -49,7 +76,8 @@ class Invoice_IndexController extends Core_Controller_Action_Standard
   }
   public function createAction()
   {
-  
+    if( !$this->_helper->requireUser()->isValid() ) return;
+    //if( !$this->_helper->requireAuth()->setAuthParams('invoice', null, 'create')->isValid()) return;
     $this->view->form = $form = new Invoice_Form_Create();
     
  	// Process
@@ -66,108 +94,92 @@ class Invoice_IndexController extends Core_Controller_Action_Standard
     $table = Engine_Api::_()->getItemTable('invoice_product');
     $db = $table->getAdapter();
     $db->beginTransaction();
+
+        $category_id=$data['category_id'];
+    $invoice_number = Engine_Api::_()->getItemTable('invoice')->getInvoiceNumber($category_id);
     
-   //  $category_id=$data['category_id'];
-   //  $invoice_number = Engine_Api::_()->getItemTable('invoice')->getInvoiceNumber($category_id);
-    
-   //  try {
-   //    $viewer = Engine_Api::_()->user()->getViewer();
-   //    //$formValues = $form->getValues();
-
-    
-   //    for($i=1;$i<=$data['hidden'];$i++){
-   //      if(!empty($data['p_name'.$i])){
-   //        $product = $table->createRow();
-   //        $product->invoice_id=$inv;
-   //        $product->description=$data['p_name' .$i];
-   //        $product->quantity=$data['quantity'.$i];
-   //        $product->price=$data['price' . $i];
-   //        $product->amount=$data['total'.$i];
-   //        $product->save();
-   //      }
-   //    }
-   //  // Commit
-   //    $db->commit();
-   //  } catch( Exception $e ) {
-   //      return $this->exceptionWrapper($e, $form, $db);
-   //  }
-
-   //  $table = Engine_Api::_()->getItemTable('invoice');
-
-   //  $db = $table->getAdapter();
-
-   //  $db->beginTransaction();
-    
-   // try {
-   //    $formValues = $form->getValues();
-    
-   //  $values = array_merge($formValues, array(
-   //              'owner_type' => $viewer->getType(),
-   //              'owner_id' => $viewer->getIdentity(),
-   //              'view_privacy' => $formValues['auth_view'],
-   //  ));
-   //  // Create a new row
-   //  $invoice = $table->createRow();
-   //  // Get all the values
-    
-   //  $invoice->date=date("d/m/Y") ;
-   //  $invoice->invoice_number=$invoice_number;
-    
-   //  $invoice->owner_type=$values['owner_type'];
-
-   //  $invoice->owner_id=$values['owner_id'];
-
-   //  $invoice->receiver=$values['receiver'];
-    
-   //  $invoice->category_id=$values['category_id'];
-   //  $invoice->address=$values['address'];
-   //  $invoice->contact_no=$values['contact_no'];
-
-   //  $invoice->email=$values['email'];
-    
-   //  $invoice->currency=$values['currency'];
-
-   //  $invoice->sub_total=$values['sub_total'];
-   //  $invoice->discount=$values['discount'];
-   //  $invoice->total=$values['total'];
-
-   //  $invoice->status=$values['status'];
-    
-   //  $invoice->save();
-    
-   //      // Commit
-   //          $db->commit();
-   //  } catch( Exception $e ) {
-   //      return $this->exceptionWrapper($e, $form, $db);
-   //  }
-
-    $table = Engine_Api::_()->getItemTable('invoice_currency');
-
-    $db = $table->getAdapter();
-
-    $db->beginTransaction();
     try {
-      $formValues = $form->getValues();
+      $viewer = Engine_Api::_()->user()->getViewer();
+      //$formValues = $form->getValues();
+
     
-    // Create a new row
-    $invoice = $table->createRow();
-    
-    // Get all the values
-    $invoice->invoice_id=$formValues['invoice_number'];
-    $invoice->currency=$formValues['currency'];
-    $invoice->subtotal=$formValues['sub_total'];
-    $invoice->discount=$formValues['discount'];
-    $invoice->total=$formValues['total'];
-    $invoice->CGST=Engine_Api::_()->getApi('settings', 'core')->getSetting('invoice.cgst', 18);
-    $invoice->SGST=Engine_Api::_()->getApi('settings', 'core')->getSetting('invoice.sgst', 18);
-    $invoice->IGST=Engine_Api::_()->getApi('settings', 'core')->getSetting('invoice.igst', 18);
-    $invoice->save();
+      for($i=1;$i<=$data['hidden'];$i++){
+        if(!empty($data['p_name'.$i])){
+          $product = $table->createRow();
+          $product->invoice_id=$invoice_number;
+          $product->description=$data['p_name' .$i];
+          $product->quantity=$data['quantity'.$i];
+          $product->price=$data['price' . $i];
+          $product->amount=$data['total'.$i];
+          $product->save();
+        }
+      }
     // Commit
-            $db->commit();
+      $db->commit();
     } catch( Exception $e ) {
         return $this->exceptionWrapper($e, $form, $db);
     }
 
+    $table = Engine_Api::_()->getItemTable('invoice');
+
+    $db = $table->getAdapter();
+
+    $db->beginTransaction();
+    
+   try {
+      $formValues = $form->getValues();
+    
+    $values = array_merge($formValues, array(
+                'owner_type' => $viewer->getType(),
+                'owner_id' => $viewer->getIdentity(),
+                'view_privacy' => $formValues['auth_view'],
+    ));
+
+    //mobile number
+    // $regex =  "/^(\+\d{1,3}[- ]?)?\d{10}$/";
+
+    //     $mobile = $values['number'];
+    //    $isValid = preg_match($regex,$mobile);
+
+    //     if(!$isValid) return $form->addError('Mobile is not valid');
+
+    // Create a new row
+    $invoice = $table->createRow();
+    // Get all the values
+    
+    $invoice->date=date("d/m/Y") ;
+    $invoice->invoice_number=$invoice_number;
+    
+    $invoice->owner_type=$values['owner_type'];
+
+    $invoice->owner_id=$values['owner_id'];
+
+    $invoice->receiver=$values['receiver'];
+    
+    $invoice->category_id=$values['category_id'];
+    $invoice->address=$values['address'];
+    $invoice->contact_no=$values['contact_no'];
+
+    $invoice->email=$values['email'];
+    
+    $invoice->currency=$values['currency'];
+   $invoice->CGST=Engine_Api::_()->getApi('settings', 'core')->getSetting('invoice.cgst', 18);
+   $invoice->SGST=Engine_Api::_()->getApi('settings', 'core')->getSetting('invoice.sgst', 18);
+   $invoice->IGST=Engine_Api::_()->getApi('settings', 'core')->getSetting('invoice.igst', 18);
+ 
+    $invoice->sub_total=$values['sub_total'];
+    $invoice->discount=$values['discount'];
+    $invoice->total=$values['total'];
+    $invoice->modified_date="";
+    $invoice->status=$values['status'];
+    
+    $invoice->save();
+    
+        // Commit
+            $db->commit();
+    } catch( Exception $e ) {
+        return $this->exceptionWrapper($e, $form, $db);
+    }
       return $this->_helper->redirector->gotoRoute(array('action' => 'create'));
   }
 
@@ -176,7 +188,8 @@ class Invoice_IndexController extends Core_Controller_Action_Standard
     $viewer = Engine_Api::_()->user()->getViewer();
     $invoice = Engine_Api::_()->getItem('invoice', $this->getRequest()->getParam('invoice_id'));
     
-    
+    $this->view->invoice_details = $invoice->toArray();
+    $this->view->invoice_number = $invoice['invoice_number'];
     // Prepare form
     $this->view->form = $form = new Invoice_Form_Edit();
     
@@ -198,7 +211,7 @@ class Invoice_IndexController extends Core_Controller_Action_Standard
     $db = $table->getAdapter();
     $db->beginTransaction();
     
-    
+
     try {
       $viewer = Engine_Api::_()->user()->getViewer();
       //$formValues = $form->getValues();
@@ -206,7 +219,6 @@ class Invoice_IndexController extends Core_Controller_Action_Standard
     
       for($i=1;$i<=$data['hidden'];$i++){
         if(!empty($data['p_name'.$i])){
-          $product->invoice_id=$inv;
           $product->description=$data['p_name' .$i];
           $product->quantity=$data['quantity'.$i];
           $product->price=$data['price' . $i];
@@ -251,64 +263,48 @@ class Invoice_IndexController extends Core_Controller_Action_Standard
     $invoice->email=$values['email'];
     
     $invoice->currency=$values['currency'];
-
+$invoice->CGST=Engine_Api::_()->getApi('settings', 'core')->getSetting('invoice.cgst', 18);
+   $invoice->SGST=Engine_Api::_()->getApi('settings', 'core')->getSetting('invoice.sgst', 18);
+   $invoice->IGST=Engine_Api::_()->getApi('settings', 'core')->getSetting('invoice.igst', 18);
+ 
     $invoice->sub_total=$values['sub_total'];
     $invoice->discount=$values['discount'];
     $invoice->total=$values['total'];
+    $invoice->modified_date=date("d/m/Y");
 
     $invoice->status=$values['status'];
     
-    //$invoice->setFromArray($values);
     $invoice->save();
     
-        // Commit
-            $db->commit();
-    } catch( Exception $e ) {
-        return $this->exceptionWrapper($e, $form, $db);
-    }
-    
-    $table = Engine_Api::_()->getItemTable('invoice_currency');
-
-    $db = $table->getAdapter();
-
-    $db->beginTransaction();
-    try {
-      $formValues = $form->getValues();
-    
-    // Create a new row
-    $invoice = $table->createRow();
-    
-    // Get all the values
-    $invoice->currency=$formValues['currency'];
-    $invoice->subtotal=$formValues['sub_total'];
-    $invoice->discount=$formValues['discount'];
-    $invoice->total=$formValues['total'];
-    $invoice->CGST=Engine_Api::_()->getApi('settings', 'core')->getSetting('invoice.cgst', 18);
-    $invoice->SGST=Engine_Api::_()->getApi('settings', 'core')->getSetting('invoice.sgst', 18);
-    $invoice->IGST=Engine_Api::_()->getApi('settings', 'core')->getSetting('invoice.igst', 18);
-    $invoice->save();
     // Commit
             $db->commit();
     } catch( Exception $e ) {
         return $this->exceptionWrapper($e, $form, $db);
     }
-
+    
+   
         // return $this->_helper->redirector->gotoRoute(array('action' => 'manage'));
 }
 
     public function viewAction()
     {   
+
         // Check permission
         $viewer = Engine_Api::_()->user()->getViewer();
         $invoice = Engine_Api::_()->getItem('invoice', $this->_getParam('invoice_id'));
+
+        
+
         // Prepare data
         $invoiceTable = Engine_Api::_()->getDbtable('invoices', 'invoice');
         // if (strpos($invoice->body, '<') === false) {
         //     $invoice->body = nl2br($invoice->body);
         // }
 
-        $this->view->invoice = $invoice;
-        //$this->view->owner = $owner = $invoice->getOwner();
+        $this->view->invoice_details = $invoice->toArray();
+        $this->view->invoice_number = $invoice['invoice_number'];
+        // print_r($a);
+        // die;
         $this->view->viewer = $viewer;
         // Get category
         if( !empty($invoice->category_id) ) {
@@ -316,6 +312,14 @@ class Invoice_IndexController extends Core_Controller_Action_Standard
                 ->find($invoice->category_id)->current();
         }
     }
+  
+  // if( !$this->_helper->requireAuth()->setAuthParams('bill', null, 'view')->isValid()) return;
+
+  // $bill = Engine_Api::_()->getItem('bill', $this->_getParam('bill_id'));
+  //         // print_r($bill->toArray());
+  //         // die();
+  // $this->view->bill_details = $bill->toArray();
+  // $this->view->$bill_number = $bill['bill_number'];
 
   public function deleteAction()
   {

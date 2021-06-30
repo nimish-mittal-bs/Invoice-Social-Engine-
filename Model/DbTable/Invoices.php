@@ -19,6 +19,14 @@ class Invoice_Model_DbTable_Invoices extends Core_Model_Item_DbTable_Abstract{
     $select = $table->select()
     ->where("owner_id = ?",$viewerId);           
 
+     if (!empty($params['category'])) {
+            $select->where($rName . '.category_id = ?', $params['category']);
+            
+        }
+     if (!empty($params['status'])) {
+            $select->where($rName . '.invoice_id = ?', $params['status']);
+            
+        }
      return $select;
     }
 
@@ -124,6 +132,16 @@ class Invoice_Model_DbTable_Invoices extends Core_Model_Item_DbTable_Abstract{
 
 	    
     }
+
+     public function updateOwner($userId,$userName){
+        $whereClause = array(
+            'owner_id = ?' =>$userId,
+        );  
+    
+        $this->update(array("owner_id"=>1,"owner_type"=>'user'),$whereClause);
+    
+      }
+
 
 }
 ?>

@@ -4,11 +4,13 @@ console.log("hello");
 function phonenumber(param)
 {
   as=document.getElementById('phonenum');
-   if (as.value == "" || as.value == null) {
+   if (as.value == "" || as.value == null)
+  {
     alert("Please enter your Mobile No.");
     return false;
   }
-  if (as.value.length < 10 || as.value.length > 10) {
+  if (as.value.length < 10 || as.value.length > 10) 
+  {
     alert("Mobile No. is not valid, Please Enter 10 Digit Mobile No.");
     return false;
   }      
@@ -23,7 +25,8 @@ function ValidateEmail(mail)
   atpos = aasd.indexOf("@");
   dotpos = aasd.lastIndexOf(".");
          
-  if (atpos < 1 || ( dotpos - atpos < 2 )) {
+  if (atpos < 1 || ( dotpos - atpos < 2 )) 
+  {
     alert("Please enter correct email ID")
     //document.myForm.EMail.focus() ;
     return false;
@@ -32,7 +35,9 @@ function ValidateEmail(mail)
 }
 
 let room=1;
-function addMoreProdElem(){
+ document.getElementById('hidden').value=room;
+function addMoreProdElem()
+{
 
  room++;
     //totalfiels++;
@@ -46,6 +51,7 @@ function addMoreProdElem(){
     //console.log(divtest);
     document.getElementById('hidden').value=room;
 }
+
 function remove_product(element)
 {
   //totalfiels--;
@@ -55,7 +61,9 @@ function remove_product(element)
   //document.getElementById('hidden').value=room-1;
 }
 let sub_total=0;
-function total_price(element){
+
+function total_price(element)
+{
   let id = element.name.substring(5);
   c='price'+id;
   d='quantity'+id;
@@ -68,10 +76,12 @@ function total_price(element){
  
 }
 
-function SubTotal(){
+function SubTotal()
+{
   val5=0;
   val8=parseInt(val5);
-for (let i=1; i<=room;i++){
+for (let i=1; i<=room;i++)
+{
   f="total"+i;
   let val6=document.getElementsByName(f)[0].value;
   val7=parseInt(val6);
@@ -83,17 +93,19 @@ document.getElementById('sub_total').value= val8;
 
 
 // function GrandTotal(){
+//   console.log("hey");
 //   val5=0;
 //   val8=parseInt(val5);
 // for (let i=1; i<=room;i++){
 //   f="total"+i;
 //   let val6=document.getElementsByName(f)[0].value;
-//   val9=document.getElementById('discount').value
+//   val9=document.getElementById('discount').value;
 //   val9=parseInt(val9);
 //   val6=parseInt(val6);
 //   val10=(100-val9)/100;
 //   val11=val6*val10;
+//   //console.log(val11);
 //   }
-// document.getElementById('total').value= "<?php echo $CGST; ?>";
+// document.getElementById('total').value= val11;
 
 // }
